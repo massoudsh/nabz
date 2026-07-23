@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>نبض — تصمیم بعدی برای هر مشتری</title>
+<meta name="description" content="نبض، ایجنت تصمیم‌ساز خرده‌فروشی که برای هر مشتری بهترین اقدام بعدی را مشخص می‌کند: چه کسی، چه زمانی، از چه کانالی، با چه پیشنهادی." />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { vazir: ['Vazirmatn', 'sans-serif'] },
+        colors: {
+          brand: {
+            50: '#f2f7f5', 100: '#dcebe4', 200: '#b9d7c9',
+            300: '#8fbeaa', 400: '#5f9d85', 500: '#3f7f68',
+            600: '#2f6552', 700: '#265042', 800: '#204035',
+            900: '#1b352c',
+          }
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body { font-family: 'Vazirmatn', sans-serif; }
+  .glow { background: radial-gradient(circle at 30% 20%, rgba(63,127,104,0.25), transparent 60%); }
+  .pulse-dot { animation: pulse 2s infinite; }
+  @keyframes pulse {
+    0%, 100% { opacity: .4; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.15); }
+  }
+</style>
+</head>
+<body class="bg-brand-900 text-brand-50 antialiased">
+
+  <!-- Header -->
+  <header class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-brand-300 pulse-dot"></span>
+      <span class="text-xl font-bold">نبض</span>
+    </div>
+    <nav class="hidden md:flex items-center gap-8 text-sm text-brand-200">
+      <a href="#problem" class="hover:text-white transition">مسئله</a>
+      <a href="#how" class="hover:text-white transition">راه‌حل</a>
+      <a href="#personas" class="hover:text-white transition">پرسوناها</a>
+      <a href="#cta" class="hover:text-white transition">شروع</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="glow">
+    <div class="max-w-4xl mx-auto px-6 pt-16 pb-24 text-center">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-brand-800/60 border border-brand-700 text-sm text-brand-200 mb-6">
+        برای خرده‌فروش‌های ایرانی — اینستاگرام، واتساپ، آنلاین‌شاپ
+      </span>
+      <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
+        مشتری کم ندارید،<br />
+        <span class="text-brand-300">تصمیم درست</span> درباره‌ی مشتری کم دارید.
+      </h1>
+      <p class="text-lg md:text-xl text-brand-200 max-w-2xl mx-auto mb-10 leading-8">
+        نبض، داده‌ی خرید، سبد، مکالمه و تعامل هر مشتری را می‌خواند و برای هرکدام
+        <strong class="text-white"> بهترین اقدام بعدی</strong> را مشخص می‌کند:
+        چه کسی، چه زمانی، از چه کانالی، با چه پیشنهادی.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#cta" class="px-8 py-3.5 rounded-xl bg-brand-300 text-brand-900 font-bold hover:bg-white transition">
+          می‌خوام روی فروشگاهم امتحان کنم
+        </a>
+        <a href="#how" class="px-8 py-3.5 rounded-xl border border-brand-600 text-brand-100 font-semibold hover:bg-brand-800 transition">
+          ببینم چطور کار می‌کند
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem -->
+  <section id="problem" class="max-w-6xl mx-auto px-6 py-20 border-t border-brand-800">
+    <h2 class="text-3xl font-bold mb-4">حلقه‌ی معیوب امروز</h2>
+    <p class="text-brand-200 max-w-2xl mb-12 leading-8">
+      یک تخفیف عمومی برای همه، یک پیامک مناسبتی، یک کمپین یکسان.
+      نتیجه؟ داده‌ی بیشتر، کمپین بیشتر، تخفیف بیشتر، حاشیه سود کمتر، وفاداری کمتر.
+    </p>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="p-6 rounded-2xl bg-brand-800/40 border border-brand-700">
+        <div class="text-3xl mb-3">🎯</div>
+        <h3 class="font-bold mb-2">تخفیف کور</h3>
+        <p class="text-sm text-brand-200 leading-7">به مشتری‌ای که بدون تخفیف هم می‌خرید، تخفیف می‌دهید و حاشیه سود می‌سوزد.</p>
+      </div>
+      <div class="p-6 rounded-2xl bg-brand-800/40 border border-brand-700">
+        <div class="text-3xl mb-3">📉</div>
+        <h3 class="font-bold mb-2">ریزش بی‌صدا</h3>
+        <p class="text-sm text-brand-200 leading-7">مشتری در آستانه‌ی ریزش، پیام مناسب و به‌موقع نمی‌گیرد و برای همیشه می‌رود.</p>
+      </div>
+      <div class="p-6 rounded-2xl bg-brand-800/40 border border-brand-700">
+        <div class="text-3xl mb-3">📵</div>
+        <h3 class="font-bold mb-2">خستگی از پیام</h3>
+        <p class="text-sm text-brand-200 leading-7">مشتری‌ای که نباید زیاد پیام بگیرد، اسپم می‌شود و آن‌فالو می‌کند.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how" class="max-w-6xl mx-auto px-6 py-20 border-t border-brand-800">
+    <h2 class="text-3xl font-bold mb-4">نبض چطور تصمیم می‌گیرد؟</h2>
+    <p class="text-brand-200 max-w-2xl mb-12 leading-8">
+      داده‌ی موجود شما (سفارش، سبد، دایرکت، واتساپ) را می‌خواند، سیگنال هر مشتری را می‌سنجد
+      و یک تصمیم شفاف و قابل‌توضیح برمی‌گرداند — نه یک جعبه سیاه.
+    </p>
+    <div class="grid md:grid-cols-4 gap-4 text-sm">
+      <div class="p-5 rounded-xl bg-brand-800/40 border border-brand-700">
+        <div class="text-brand-300 font-bold mb-1">۱. داده</div>
+        سفارش، سبد، مکالمه، استوری
+      </div>
+      <div class="p-5 rounded-xl bg-brand-800/40 border border-brand-700">
+        <div class="text-brand-300 font-bold mb-1">۲. سیگنال</div>
+        ریسک ریزش، حساسیت به تخفیف/ارسال
+      </div>
+      <div class="p-5 rounded-xl bg-brand-800/40 border border-brand-700">
+        <div class="text-brand-300 font-bold mb-1">۳. تصمیم</div>
+        بهترین اقدام از بین ۹ گزینه
+      </div>
+      <div class="p-5 rounded-xl bg-brand-800/40 border border-brand-700">
+        <div class="text-brand-300 font-bold mb-1">۴. پیام</div>
+        متن فارسی آماده، مناسب کانال
+      </div>
+    </div>
+
+    <!-- decision card mock -->
+    <div class="mt-12 max-w-md mx-auto p-6 rounded-2xl bg-brand-800/60 border border-brand-600">
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-xs text-brand-300">تصمیم برای مریم</span>
+        <span class="text-xs px-2 py-1 rounded-full bg-brand-300/20 text-brand-200">ارسال رایگان</span>
+      </div>
+      <p class="text-brand-50 leading-8 mb-4">
+        «سلام مریم جان، سبدت هنوز منتظرته! امروز ارسال رایگانه، دوست داری تکمیلش کنیم؟»
+      </p>
+      <div class="text-xs text-brand-300 border-t border-brand-700 pt-3">
+        دلیل: سبد هنگام دیدن هزینه ارسال رها شده و حساسیت به ارسال بالاست
+      </div>
+    </div>
+  </section>
+
+  <!-- Personas -->
+  <section id="personas" class="max-w-6xl mx-auto px-6 py-20 border-t border-brand-800">
+    <h2 class="text-3xl font-bold mb-4">هر مشتری، تصمیم خودش</h2>
+    <div class="grid md:grid-cols-3 gap-4 text-sm mt-10">
+      <div class="p-5 rounded-xl border border-brand-700">فقط یادآوری می‌خواهد → بدون تخفیف</div>
+      <div class="p-5 rounded-xl border border-brand-700">حساس به ارسال رایگان → پیشنهاد ارسال رایگان</div>
+      <div class="p-5 rounded-xl border border-brand-700">بدون تخفیف هم می‌خرد → مشتری ویژه، بدون تخفیف</div>
+      <div class="p-5 rounded-xl border border-brand-700">سبد سنگین رهاشده → پیشنهاد BNPL</div>
+      <div class="p-5 rounded-xl border border-brand-700">نباید زیاد پیام بگیرد → سکوت</div>
+      <div class="p-5 rounded-xl border border-brand-700">ریسک ریزش امروز → پیام فوری بازگشت</div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta" class="max-w-4xl mx-auto px-6 py-24 text-center border-t border-brand-800">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">آماده‌اید نبض فروشگاهتان را بگیرید؟</h2>
+    <p class="text-brand-200 mb-10 leading-8">
+      نسخه‌ی اول برای فروشگاه‌های اینستاگرامی و آنلاین‌شاپ‌های کوچک و متوسط است.
+    </p>
+    <a href="mailto:hello@nabz.example" class="inline-block px-10 py-4 rounded-xl bg-brand-300 text-brand-900 font-bold hover:bg-white transition">
+      درخواست دمو
+    </a>
+  </section>
+
+  <footer class="max-w-6xl mx-auto px-6 py-10 text-center text-brand-400 text-sm border-t border-brand-800">
+    نبض — تصمیم بعدی برای هر مشتری
+  </footer>
+
+</body>
+</html>

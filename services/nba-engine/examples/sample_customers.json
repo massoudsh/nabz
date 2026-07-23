@@ -1,0 +1,93 @@
+{
+  "reminder_only": {
+    "customer_id": "c_reminder",
+    "name": "سارا",
+    "preferred_channel": "instagram_dm",
+    "max_messages_per_week": 3,
+    "messages_sent_last_7_days": 0,
+    "orders": [
+      {"order_id": "o1", "amount": 250000, "used_discount_code": false, "ordered_at": "2026-06-15"},
+      {"order_id": "o2", "amount": 300000, "used_discount_code": false, "ordered_at": "2026-07-15"}
+    ],
+    "cart": {"status": "none", "items_value": 0, "abandon_stage": "none", "distinct_categories": 0}
+  },
+
+  "free_shipping_sensitive": {
+    "customer_id": "c_shipping",
+    "name": "مریم",
+    "preferred_channel": "whatsapp",
+    "max_messages_per_week": 3,
+    "messages_sent_last_7_days": 1,
+    "orders": [
+      {"order_id": "o1", "amount": 400000, "used_discount_code": false, "ordered_at": "2026-07-01"}
+    ],
+    "past_cart_abandon_stage_history": ["shipping_cost_seen", "shipping_cost_seen"],
+    "cart": {
+      "status": "abandoned",
+      "items_value": 420000,
+      "abandon_stage": "shipping_cost_seen",
+      "updated_at": "2026-07-22T10:00:00Z",
+      "distinct_categories": 1
+    }
+  },
+
+  "no_discount_needed": {
+    "customer_id": "c_vip",
+    "name": "علی",
+    "preferred_channel": "instagram_dm",
+    "max_messages_per_week": 2,
+    "messages_sent_last_7_days": 0,
+    "orders": [
+      {"order_id": "o1", "amount": 500000, "used_discount_code": false, "ordered_at": "2026-03-01"},
+      {"order_id": "o2", "amount": 520000, "used_discount_code": false, "ordered_at": "2026-04-10"},
+      {"order_id": "o3", "amount": 480000, "used_discount_code": false, "ordered_at": "2026-05-20"},
+      {"order_id": "o4", "amount": 600000, "used_discount_code": false, "ordered_at": "2026-07-01"}
+    ],
+    "cart": {"status": "none", "items_value": 0, "abandon_stage": "none", "distinct_categories": 0}
+  },
+
+  "needs_bnpl": {
+    "customer_id": "c_bnpl",
+    "name": "نگار",
+    "preferred_channel": "whatsapp",
+    "max_messages_per_week": 3,
+    "messages_sent_last_7_days": 0,
+    "store_avg_cart_value": 300000,
+    "orders": [
+      {"order_id": "o1", "amount": 350000, "used_discount_code": true, "ordered_at": "2026-07-05"}
+    ],
+    "cart": {
+      "status": "abandoned",
+      "items_value": 1200000,
+      "abandon_stage": "payment_page",
+      "updated_at": "2026-07-23T08:00:00Z",
+      "distinct_categories": 2
+    }
+  },
+
+  "do_not_overmessage": {
+    "customer_id": "c_quiet",
+    "name": "رضا",
+    "preferred_channel": "sms",
+    "max_messages_per_week": 2,
+    "messages_sent_last_7_days": 2,
+    "orders": [
+      {"order_id": "o1", "amount": 200000, "used_discount_code": true, "ordered_at": "2026-05-01"}
+    ],
+    "cart": {"status": "none", "items_value": 0, "abandon_stage": "none", "distinct_categories": 0}
+  },
+
+  "urgent_churn_risk": {
+    "customer_id": "c_churn",
+    "name": "الهام",
+    "preferred_channel": "sms",
+    "max_messages_per_week": 3,
+    "messages_sent_last_7_days": 0,
+    "orders": [
+      {"order_id": "o1", "amount": 300000, "used_discount_code": false, "ordered_at": "2025-11-01"},
+      {"order_id": "o2", "amount": 320000, "used_discount_code": false, "ordered_at": "2025-12-05"},
+      {"order_id": "o3", "amount": 310000, "used_discount_code": false, "ordered_at": "2026-01-08"}
+    ],
+    "cart": {"status": "none", "items_value": 0, "abandon_stage": "none", "distinct_categories": 0}
+  }
+}
