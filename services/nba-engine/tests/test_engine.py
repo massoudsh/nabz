@@ -2,6 +2,7 @@
 
 import json
 import pathlib
+from datetime import date, datetime, timedelta
 
 import pytest
 
@@ -10,10 +11,36 @@ from app.models import Action, Customer
 
 EXAMPLES_PATH = pathlib.Path(__file__).resolve().parent.parent / "examples" / "sample_customers.json"
 
+# پرسوناهای examples/sample_customers.json با تاریخ‌های مطلق نوشته شده‌اند، طوری‌که
+# نسبت به این «امروز» فرضی معنا دارند (مثلاً «سبد ۲ روز پیش رها شده»). چون زمان واقعی
+# اجرای تست جلو می‌رود، تاریخ‌ها را هر بار به همان فاصله‌ی نسبی از «امروز واقعی» جابه‌جا
+# می‌کنیم تا تست‌ها به تاریخ اجرا وابسته و flaky نشوند.
+FIXTURE_ANCHOR = date(2026, 7, 25)
+_DATE_KEYS = {"ordered_at", "joined_at"}
+_DATETIME_KEYS = {"updated_at", "occurred_at", "last_story_reaction_at"}
+
+
+def _shift(node, delta: timedelta):
+    if isinstance(node, dict):
+        shifted = {}
+        for key, value in node.items():
+            if key in _DATE_KEYS and isinstance(value, str):
+                shifted[key] = (date.fromisoformat(value) + delta).isoformat()
+            elif key in _DATETIME_KEYS and isinstance(value, str):
+                dt_value = datetime.fromisoformat(value.replace("Z", "+00:00")) + delta
+                shifted[key] = dt_value.isoformat().replace("+00:00", "Z")
+            else:
+                shifted[key] = _shift(value, delta)
+        return shifted
+    if isinstance(node, list):
+        return [_shift(item, delta) for item in node]
+    return node
+
 
 def load_persona(key: str) -> Customer:
     data = json.loads(EXAMPLES_PATH.read_text(encoding="utf-8"))
-    return Customer(**data[key])
+    delta = date.today() - FIXTURE_ANCHOR
+    return Customer(**_shift(data[key], delta))
 
 
 @pytest.mark.parametrize(

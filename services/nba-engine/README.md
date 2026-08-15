@@ -45,15 +45,30 @@ curl -X POST http://127.0.0.1:8000/decide \
 }
 ```
 
+## بازخورد (Feedback Loop — آماده‌سازی فاز ۲)
+
+نتیجه‌ی واقعی یک اقدام پیشنهادی (باز شد؟ خرید شد؟) با `POST /feedback` ثبت می‌شود
+و با `GET /feedback/{customer_id}` قابل بازخوانی است. در MVP این داده فقط درون‌حافظه
+ذخیره می‌شود (`app/feedback_store.py`)؛ در فاز ۱ جایش را جدول `CampaignHistory` در
+Postgres می‌گیرد (`docs/ARCHITECTURE.md` بخش ۲ و ۶).
+
+```bash
+curl -X POST http://127.0.0.1:8000/feedback \
+  -H "Content-Type: application/json" \
+  -d '{"customer_id":"c_shipping","action":"free_shipping","channel":"whatsapp","opened":true,"purchased":true}'
+```
+
 ## ساختار
 
 ```
 app/
-  models.py    # اسکیمای ورودی/خروجی (Pydantic)
-  engine.py    # استخراج سیگنال + قوانین تصمیم
-  catalog.py   # کاتالوگ اقدام‌ها
-  channels.py  # قالب پیام فارسی به تفکیک کانال
-  main.py      # FastAPI app
+  models.py           # اسکیمای ورودی/خروجی (Pydantic) + CampaignFeedback
+  engine.py           # استخراج سیگنال + قوانین تصمیم
+  catalog.py          # کاتالوگ اقدام‌ها
+  channels.py         # قالب پیام فارسی به تفکیک کانال
+  feedback_store.py   # ذخیره‌ی درون‌حافظه‌ای بازخورد (MVP)
+  main.py             # FastAPI app — /health, /decide, /feedback
 examples/sample_customers.json  # ۶ پرسونای نمونه مطابق PRD
-tests/test_engine.py            # تست رفتار موتور برای هر پرسونا
+tests/test_engine.py            # تست رفتار موتور برای هر پرسونا (تاریخ‌ها نسبت به امروز جابه‌جا می‌شوند)
+tests/test_feedback.py          # تست ثبت/بازخوانی بازخورد
 ```

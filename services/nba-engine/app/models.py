@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from enum import Enum
 from typing import Optional
 
@@ -100,3 +100,17 @@ class Decision(BaseModel):
     confidence: float = Field(..., ge=0, le=1)
     do_not_disturb: bool = False
     signals: dict[str, float] = Field(default_factory=dict)
+
+
+class CampaignFeedback(BaseModel):
+    """نتیجه‌ی واقعی یک اقدام پیشنهادی — docs/ARCHITECTURE.md بخش ۲ (CampaignHistory).
+
+    فاز MVP فقط این بازخورد را ذخیره می‌کند؛ استفاده در امتیازدهی تطبیقی، فاز ۲ است.
+    """
+
+    customer_id: str
+    action: Action
+    channel: Channel
+    opened: bool = False
+    purchased: bool = False
+    sent_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
