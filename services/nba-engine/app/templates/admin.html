@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>پنل مدیریتی نبض</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { vazir: ['Vazirmatn', 'sans-serif'] },
+        colors: {
+          brand: {
+            50: '#f2f7f5', 100: '#dcebe4', 200: '#b9d7c9',
+            300: '#8fbeaa', 400: '#5f9d85', 500: '#3f7f68',
+            600: '#2f6552', 700: '#265042', 800: '#204035', 900: '#1b352c',
+          }
+        }
+      }
+    }
+  }
+</script>
+<style>body { font-family: 'Vazirmatn', sans-serif; }</style>
+</head>
+<body class="bg-brand-900 text-brand-50 antialiased min-h-screen p-6">
+
+  <header class="max-w-5xl mx-auto mb-6 flex items-center justify-between">
+    <h1 class="text-2xl font-bold">پنل مدیریتی نبض — لیست تصمیم‌ها</h1>
+    <nav class="flex gap-2 text-sm">
+      {% for label, value in [('همه', ''), ('در انتظار', 'pending'), ('تاییدشده', 'approved'), ('ردشده', 'rejected')] %}
+      <a href="/admin?status={{ value }}&api_key={{ api_key }}"
+         class="px-3 py-1 rounded-full border {{ 'bg-brand-500 border-brand-500' if status_filter == value else 'border-brand-600 hover:bg-brand-800' }}">
+        {{ label }}
+      </a>
+      {% endfor %}
+    </nav>
+  </header>
+
+  <main class="max-w-5xl mx-auto space-y-3">
+    {% if not decisions %}
+      <p class="text-brand-300">هنوز هیچ تصمیمی ثبت نشده — با فراخوانی POST /decide یا /decide/batch اینجا پر می‌شود.</p>
+    {% endif %}
+
+    {% for d in decisions %}
+    <div class="bg-brand-800/60 border border-brand-700 rounded-xl p-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+        <div>
+          <span class="font-semibold">{{ d.customer_id }}</span>
+          <span class="text-brand-300 text-sm">— {{ d.action }} · {{ d.channel }} · اطمینان {{ d.confidence }}</span>
+        </div>
+        <span class="text-xs px-2 py-1 rounded-full
+          {% if d.status == 'approved' %}bg-green-700
+          {% elif d.status == 'rejected' %}bg-red-700
+          {% else %}bg-yellow-700{% endif %}">
+          {{ d.status }}
+        </span>
+      </div>
+      <p class="text-brand-100 mb-3">{{ d.message_fa }}</p>
+      {% if d.status == 'pending' %}
+      <div class="flex gap-2">
+        <form method="post" action="/admin/decisions/{{ d.id }}/approve?api_key={{ api_key }}">
+          <button class="px-3 py-1 rounded-lg bg-brand-500 hover:bg-brand-400 text-sm">تایید</button>
+        </form>
+        <form method="post" action="/admin/decisions/{{ d.id }}/reject?api_key={{ api_key }}">
+          <button class="px-3 py-1 rounded-lg bg-red-800 hover:bg-red-700 text-sm">رد</button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </main>
+</body>
+</html>

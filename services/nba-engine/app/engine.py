@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import date, datetime, timezone
 from statistics import mean
 
+from app import feedback_store
 from app.catalog import ACTION_METADATA
 from app.channels import render_message
 from app.models import (
@@ -16,6 +17,22 @@ from app.models import (
     Customer,
     Decision,
 )
+
+# حداکثر میزان جابه‌جایی confidence بر اساس بازخورد واقعی (فاز ۲، issue #5).
+_ADAPTIVE_ADJUSTMENT_CAP = 0.15
+
+
+def _adaptive_adjustment(action: Action) -> float:
+    """تنظیم confidence بر اساس نرخ خرید واقعیِ ثبت‌شده برای این اقدام.
+
+    docs/ARCHITECTURE.md بخش ۵: به‌جای وزن ثابت، از CampaignHistory واقعی
+    استفاده می‌شود. اگر نمونه‌ی کافی نباشد (feedback_store برمی‌گرداند None)
+    بدون تغییر باقی می‌ماند تا رفتار MVP حفظ شود.
+    """
+    rate = feedback_store.purchase_rate_for_action(action)
+    if rate is None:
+        return 0.0
+    return _clamp((rate - 0.5) * 2 * _ADAPTIVE_ADJUSTMENT_CAP, -_ADAPTIVE_ADJUSTMENT_CAP, _ADAPTIVE_ADJUSTMENT_CAP)
 
 
 def _clamp(value: float, lo: float = 0.0, hi: float = 1.0) -> float:
@@ -116,6 +133,13 @@ def decide(customer: Customer) -> Decision:
 
     def finalize(action: Action, channel: Channel, confidence: float) -> Decision:
         meta = ACTION_METADATA[action]
+        if action != Action.DO_NOT_DISTURB:
+            adjustment = _adaptive_adjustment(action)
+            if adjustment != 0.0:
+                reasoning.append(
+                    f"امتیاز بر اساس نرخ خرید واقعی این اقدام در بازخوردهای قبلی تنظیم شد ({adjustment:+.2f})"
+                )
+            confidence = confidence + adjustment
         return Decision(
             customer_id=customer.customer_id,
             recommended_action=action,
