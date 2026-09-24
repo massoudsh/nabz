@@ -1,176 +1,299 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>نبض — تصمیم بعدی برای هر مشتری</title>
-<meta name="description" content="نبض، ایجنت تصمیم‌ساز خرده‌فروشی که برای هر مشتری بهترین اقدام بعدی را مشخص می‌کند: چه کسی، چه زمانی، از چه کانالی، با چه پیشنهادی." />
-<link rel="preconnect" href="https://cdn.jsdelivr.net" />
-<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        fontFamily: { vazir: ['Vazirmatn', 'sans-serif'] },
-        colors: {
-          brand: {
-            50: '#f2f7f5', 100: '#dcebe4', 200: '#b9d7c9',
-            300: '#8fbeaa', 400: '#5f9d85', 500: '#3f7f68',
-            600: '#2f6552', 700: '#265042', 800: '#204035',
-            900: '#1b352c',
-          }
-        }
-      }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b0e12" />
+  <title>نبض | تصمیم بعدی هر مشتری</title>
+  <meta name="description" content="نبض برای هر مشتری بهترین اقدام بعدی را مشخص می‌کند؛ چه کسی، چه زمانی، از چه کانالی و با چه پیشنهادی." />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0e12;
+      --surface: #11161c;
+      --surface-strong: #171d25;
+      --surface-soft: rgba(255, 255, 255, .035);
+      --text: #f3f5f7;
+      --muted: #98a1ad;
+      --subtle: #68727f;
+      --border: rgba(255, 255, 255, .1);
+      --border-strong: rgba(255, 255, 255, .16);
+      --accent: #e8b76a;
+      --accent-soft: rgba(232, 183, 106, .13);
+      --green: #7ed7ad;
+      --red: #f28d8d;
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 30px;
+      --shadow: 0 24px 80px rgba(0, 0, 0, .32);
     }
-  }
-</script>
-<style>
-  body { font-family: 'Vazirmatn', sans-serif; }
-  .glow { background: radial-gradient(circle at 30% 20%, rgba(63,127,104,0.25), transparent 60%); }
-  .pulse-dot { animation: pulse 2s infinite; }
-  @keyframes pulse {
-    0%, 100% { opacity: .4; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.15); }
-  }
-</style>
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Vazirmatn, Tahoma, sans-serif;
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .34;
+      background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: linear-gradient(to bottom, black, transparent 75%);
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    .container { width: min(1160px, calc(100% - 40px)); margin: 0 auto; position: relative; }
+    .eyebrow { color: var(--accent); font-size: .78rem; font-weight: 700; letter-spacing: .04em; }
+    .muted { color: var(--muted); }
+    .section { padding: 110px 0; border-top: 1px solid var(--border); }
+    .section-heading { max-width: 620px; margin-bottom: 46px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: clamp(2.7rem, 6vw, 5.8rem); line-height: 1.12; letter-spacing: -.055em; margin-bottom: 26px; }
+    h2 { font-size: clamp(2rem, 4vw, 3.25rem); letter-spacing: -.035em; line-height: 1.25; margin-bottom: 14px; }
+    h3 { font-size: 1.05rem; margin-bottom: 7px; }
+    .highlight { color: var(--accent); }
+    .nav-wrap { position: sticky; top: 0; z-index: 10; background: rgba(11, 14, 18, .78); border-bottom: 1px solid var(--border); backdrop-filter: blur(18px); }
+    nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 11px; font-weight: 800; font-size: 1.25rem; }
+    .brand-mark { width: 27px; height: 27px; border: 2px solid var(--accent); border-radius: 50%; position: relative; }
+    .brand-mark::after { content: ""; position: absolute; width: 7px; height: 7px; background: var(--accent); border-radius: 50%; top: 8px; right: 8px; box-shadow: 0 0 18px var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 30px; color: var(--muted); font-size: .9rem; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta, .button-primary { background: var(--text); color: #15191e; border: 0; border-radius: 11px; padding: 11px 18px; font-weight: 800; cursor: pointer; transition: transform .2s, background .2s; }
+    .nav-cta:hover, .button-primary:hover { transform: translateY(-2px); background: var(--accent); }
+    .button-secondary { color: var(--text); border: 1px solid var(--border-strong); border-radius: 11px; padding: 11px 18px; font-weight: 700; transition: background .2s, border .2s; }
+    .button-secondary:hover { background: var(--surface-strong); border-color: var(--accent); }
+    .menu-toggle { display: none; background: none; color: var(--text); border: 1px solid var(--border); border-radius: 9px; padding: 6px 10px; }
+
+    .hero { padding: 100px 0 126px; overflow: hidden; }
+    .hero::after { content: ""; position: absolute; width: 620px; height: 620px; border-radius: 50%; background: rgba(232, 183, 106, .08); filter: blur(80px); top: -240px; left: -190px; pointer-events: none; }
+    .hero-grid { display: grid; grid-template-columns: 1.02fr .98fr; align-items: center; gap: 82px; }
+    .hero-copy { position: relative; z-index: 1; }
+    .hero-copy > p { max-width: 585px; color: var(--muted); font-size: 1.14rem; line-height: 2.1; margin-bottom: 34px; }
+    .hero-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .hero-note { display: flex; align-items: center; gap: 9px; color: var(--subtle); font-size: .78rem; margin-top: 22px; }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 5px rgba(126, 215, 173, .1); }
+
+    .dashboard { position: relative; z-index: 1; padding: 15px; background: rgba(17, 22, 28, .78); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); box-shadow: var(--shadow); transform: rotate(1.3deg); }
+    .dashboard-top { display: flex; justify-content: space-between; align-items: center; padding: 4px 8px 16px; color: var(--muted); font-size: .72rem; }
+    .window-dots { display: flex; gap: 5px; direction: ltr; }
+    .window-dots i { display: block; width: 7px; height: 7px; border-radius: 50%; background: #404954; }
+    .window-dots i:first-child { background: var(--red); }
+    .window-dots i:nth-child(2) { background: var(--accent); }
+    .window-dots i:last-child { background: var(--green); }
+    .dash-body { background: var(--bg); border: 1px solid var(--border); border-radius: 19px; padding: 20px; }
+    .dash-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+    .dash-header strong { display: block; font-size: 1.05rem; }
+    .dash-header span { color: var(--subtle); font-size: .72rem; }
+    .status-chip { color: var(--green); background: rgba(126, 215, 173, .1); border-radius: 99px; padding: 4px 9px; font-size: .68rem; }
+    .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
+    .metric { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 11px; }
+    .metric small { color: var(--subtle); display: block; font-size: .63rem; }
+    .metric b { font-size: 1.15rem; display: block; margin-top: 2px; }
+    .metric em { color: var(--green); font-size: .62rem; font-style: normal; }
+    .decision { border: 1px solid rgba(232, 183, 106, .4); background: linear-gradient(135deg, rgba(232, 183, 106, .11), rgba(232, 183, 106, .025)); border-radius: 16px; padding: 15px; }
+    .decision-label { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: .69rem; margin-bottom: 12px; }
+    .decision-label b { color: var(--accent); font-size: .75rem; }
+    .customer { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; }
+    .avatar { display: grid; place-items: center; width: 33px; height: 33px; border-radius: 50%; background: #563f2b; color: var(--accent); font-weight: 800; font-size: .8rem; }
+    .customer strong { display: block; font-size: .82rem; }
+    .customer span { display: block; color: var(--subtle); font-size: .63rem; }
+    .message { background: rgba(0, 0, 0, .2); border-radius: 10px; padding: 11px 12px; color: #d8dde2; font-size: .73rem; line-height: 1.9; }
+    .reason { color: var(--muted); font-size: .65rem; margin: 12px 0 0; }
+    .reason::before { content: ""; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); margin-left: 6px; }
+
+    .proof-strip { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 24px 0; }
+    .proof-inner { display: flex; align-items: center; justify-content: space-between; gap: 25px; color: var(--subtle); font-size: .78rem; }
+    .proof-items { display: flex; gap: 38px; flex-wrap: wrap; color: var(--muted); }
+    .proof-items span::before { content: "✓"; color: var(--green); margin-left: 7px; }
+
+    .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .problem-card, .persona-card, .feature-card { background: var(--surface-soft); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 25px; transition: transform .2s, border .2s, background .2s; }
+    .problem-card:hover, .persona-card:hover, .feature-card:hover { transform: translateY(-4px); border-color: var(--border-strong); background: var(--surface); }
+    .card-number { color: var(--accent); font-size: .75rem; font-weight: 800; margin-bottom: 28px; }
+    .problem-card p, .feature-card p, .persona-card p { color: var(--muted); font-size: .88rem; line-height: 2; margin-bottom: 0; }
+
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+    .step { padding: 25px 22px; min-height: 192px; border-left: 1px solid var(--border); background: var(--surface-soft); }
+    .step:last-child { border-left: 0; }
+    .step-number { display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid var(--accent); color: var(--accent); border-radius: 50%; font-size: .75rem; margin-bottom: 25px; }
+    .step p { color: var(--muted); font-size: .82rem; line-height: 1.9; }
+
+    .split { display: grid; grid-template-columns: .8fr 1.2fr; align-items: center; gap: 80px; }
+    .quote { font-size: clamp(1.5rem, 3vw, 2.4rem); line-height: 1.65; letter-spacing: -.03em; }
+    .quote-mark { color: var(--accent); font-size: 4rem; line-height: .4; vertical-align: -22px; margin-left: 8px; }
+    .personas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .persona-card { padding: 20px; display: flex; gap: 14px; align-items: flex-start; }
+    .persona-icon { flex: 0 0 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: var(--accent-soft); color: var(--accent); font-weight: 800; font-size: .85rem; }
+    .persona-card h3 { font-size: .9rem; margin-bottom: 2px; }
+    .persona-card p { font-size: .75rem; line-height: 1.8; }
+
+    .cta { position: relative; overflow: hidden; text-align: center; padding: 95px 20px; }
+    .cta::before { content: ""; position: absolute; inset: 12% 25%; background: rgba(232, 183, 106, .09); filter: blur(85px); pointer-events: none; }
+    .cta > * { position: relative; }
+    .cta p { max-width: 490px; margin: 0 auto 30px; color: var(--muted); }
+    .cta-form { display: flex; justify-content: center; gap: 8px; max-width: 440px; margin: 0 auto; }
+    .cta-form input { min-width: 0; flex: 1; color: var(--text); background: var(--surface); border: 1px solid var(--border-strong); border-radius: 11px; padding: 12px 14px; outline: none; }
+    .cta-form input:focus { border-color: var(--accent); }
+    .form-message { min-height: 25px; color: var(--green); font-size: .75rem; margin: 12px 0 0; }
+    footer { border-top: 1px solid var(--border); padding: 28px 0; color: var(--subtle); font-size: .74rem; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 20px; }
+
+    @media (max-width: 860px) {
+      .hero-grid, .split { grid-template-columns: 1fr; gap: 48px; }
+      .hero { padding-top: 70px; }
+      .hero-copy { text-align: center; }
+      .hero-copy > p { margin-right: auto; margin-left: auto; }
+      .hero-actions, .hero-note { justify-content: center; }
+      .dashboard { max-width: 560px; width: 100%; margin: auto; }
+      .steps { grid-template-columns: repeat(2, 1fr); }
+      .step:nth-child(2) { border-left: 0; }
+      .step:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
+      .split .section-heading { margin-bottom: 0; }
+    }
+    @media (max-width: 640px) {
+      .container { width: min(100% - 28px, 560px); }
+      .section { padding: 76px 0; }
+      nav { min-height: 68px; }
+      .nav-links { display: none; position: absolute; top: 68px; right: 0; left: 0; flex-direction: column; align-items: stretch; gap: 0; padding: 8px 14px 14px; background: rgba(11, 14, 18, .98); border-bottom: 1px solid var(--border); }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 10px 0; }
+      .nav-cta { display: none; }
+      .menu-toggle { display: block; }
+      h1 { font-size: clamp(2.45rem, 13vw, 4rem); }
+      .proof-inner, .footer-inner { align-items: flex-start; flex-direction: column; }
+      .proof-items { gap: 10px 20px; }
+      .problem-grid, .personas { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .step, .step:nth-child(2) { min-height: auto; border-left: 0; border-bottom: 1px solid var(--border); }
+      .step:last-child { border-bottom: 0; }
+      .cta-form { flex-direction: column; }
+      .button-primary, .button-secondary { text-align: center; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+    }
+  </style>
 </head>
-<body class="bg-brand-900 text-brand-50 antialiased">
-
-  <!-- Header -->
-  <header class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
-    <div class="flex items-center gap-2">
-      <span class="w-2.5 h-2.5 rounded-full bg-brand-300 pulse-dot"></span>
-      <span class="text-xl font-bold">نبض</span>
-    </div>
-    <nav class="hidden md:flex items-center gap-8 text-sm text-brand-200">
-      <a href="#problem" class="hover:text-white transition">مسئله</a>
-      <a href="#how" class="hover:text-white transition">راه‌حل</a>
-      <a href="#personas" class="hover:text-white transition">پرسوناها</a>
-      <a href="#cta" class="hover:text-white transition">شروع</a>
+<body>
+  <div class="nav-wrap">
+    <nav class="container" aria-label="ناوبری اصلی">
+      <a class="brand" href="#top" aria-label="نبض، صفحه اصلی"><span class="brand-mark" aria-hidden="true"></span><span>نبض</span></a>
+      <div class="nav-links" id="navLinks">
+        <a href="#problem">مسئله</a>
+        <a href="#how">چطور کار می‌کند</a>
+        <a href="#personas">برای هر مشتری</a>
+        <a href="#start">درخواست دمو</a>
+      </div>
+      <a class="nav-cta" href="#start">شروع گفتگو</a>
+      <button class="menu-toggle" type="button" aria-label="باز کردن منو" aria-expanded="false">منو</button>
     </nav>
-  </header>
+  </div>
 
-  <!-- Hero -->
-  <section class="glow">
-    <div class="max-w-4xl mx-auto px-6 pt-16 pb-24 text-center">
-      <span class="inline-block px-4 py-1.5 rounded-full bg-brand-800/60 border border-brand-700 text-sm text-brand-200 mb-6">
-        برای خرده‌فروش‌های ایرانی — اینستاگرام، واتساپ، آنلاین‌شاپ
-      </span>
-      <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-        مشتری کم ندارید،<br />
-        <span class="text-brand-300">تصمیم درست</span> درباره‌ی مشتری کم دارید.
-      </h1>
-      <p class="text-lg md:text-xl text-brand-200 max-w-2xl mx-auto mb-10 leading-8">
-        نبض، داده‌ی خرید، سبد، مکالمه و تعامل هر مشتری را می‌خواند و برای هرکدام
-        <strong class="text-white"> بهترین اقدام بعدی</strong> را مشخص می‌کند:
-        چه کسی، چه زمانی، از چه کانالی، با چه پیشنهادی.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="#cta" class="px-8 py-3.5 rounded-xl bg-brand-300 text-brand-900 font-bold hover:bg-white transition">
-          می‌خوام روی فروشگاهم امتحان کنم
-        </a>
-        <a href="#how" class="px-8 py-3.5 rounded-xl border border-brand-600 text-brand-100 font-semibold hover:bg-brand-800 transition">
-          ببینم چطور کار می‌کند
-        </a>
-      </div>
-    </div>
-  </section>
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">لایهٔ تصمیم برای فروشگاه‌های ایرانی</div>
+          <h1>برای هر مشتری،<br /><span class="highlight">حرکت بعدی</span> را بدانید.</h1>
+          <p>نبض داده‌های خرید، سبد و مکالمه را به یک تصمیم روشن تبدیل می‌کند؛ چه کسی، چه زمانی، از چه کانالی و با چه پیشنهادی.</p>
+          <div class="hero-actions">
+            <a class="button-primary" href="#start">درخواست دسترسی آزمایشی</a>
+            <a class="button-secondary" href="#how">نبض چطور کار می‌کند؟</a>
+          </div>
+          <div class="hero-note"><span class="live-dot"></span> بدون جایگزین‌کردن CRM یا ابزار ارسال پیام</div>
+        </div>
 
-  <!-- Problem -->
-  <section id="problem" class="max-w-6xl mx-auto px-6 py-20 border-t border-brand-800">
-    <h2 class="text-3xl font-bold mb-4">حلقه‌ی معیوب امروز</h2>
-    <p class="text-brand-200 max-w-2xl mb-12 leading-8">
-      یک تخفیف عمومی برای همه، یک پیامک مناسبتی، یک کمپین یکسان.
-      نتیجه؟ داده‌ی بیشتر، کمپین بیشتر، تخفیف بیشتر، حاشیه سود کمتر، وفاداری کمتر.
-    </p>
-    <div class="grid md:grid-cols-3 gap-6">
-      <div class="p-6 rounded-2xl bg-brand-800/40 border border-brand-700">
-        <div class="text-3xl mb-3">🎯</div>
-        <h3 class="font-bold mb-2">تخفیف کور</h3>
-        <p class="text-sm text-brand-200 leading-7">به مشتری‌ای که بدون تخفیف هم می‌خرید، تخفیف می‌دهید و حاشیه سود می‌سوزد.</p>
+        <div class="dashboard" aria-label="نمونه داشبورد نبض">
+          <div class="dashboard-top"><span>داشبورد تصمیم‌ها</span><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div class="dash-body">
+            <div class="dash-header"><div><strong>امروز در نبض</strong><span>آخرین به‌روزرسانی: همین حالا</span></div><span class="status-chip">در حال پایش</span></div>
+            <div class="metric-grid">
+              <div class="metric"><small>تصمیم‌های آماده</small><b>۱۲۸</b><em>+۱۸٪ این هفته</em></div>
+              <div class="metric"><small>ریسک ریزش</small><b>۲۴</b><em>نیازمند توجه</em></div>
+              <div class="metric"><small>بدون تخفیف</small><b>۶۷٪</b><em>حفظ حاشیه سود</em></div>
+            </div>
+            <div class="decision">
+              <div class="decision-label"><span>پیشنهاد بعدی برای مریم</span><b>ارسال رایگان</b></div>
+              <div class="customer"><div class="avatar">م</div><div><strong>مریم احمدی</strong><span>سبد رهاشده · واتساپ</span></div></div>
+              <div class="message">سلام مریم جان، سبدت هنوز منتظرته! امروز ارسال رایگانه، دوست داری تکمیلش کنیم؟</div>
+              <p class="reason">سبد هنگام دیدن هزینه ارسال رها شده و حساسیت به ارسال بالاست</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="p-6 rounded-2xl bg-brand-800/40 border border-brand-700">
-        <div class="text-3xl mb-3">📉</div>
-        <h3 class="font-bold mb-2">ریزش بی‌صدا</h3>
-        <p class="text-sm text-brand-200 leading-7">مشتری در آستانه‌ی ریزش، پیام مناسب و به‌موقع نمی‌گیرد و برای همیشه می‌رود.</p>
-      </div>
-      <div class="p-6 rounded-2xl bg-brand-800/40 border border-brand-700">
-        <div class="text-3xl mb-3">📵</div>
-        <h3 class="font-bold mb-2">خستگی از پیام</h3>
-        <p class="text-sm text-brand-200 leading-7">مشتری‌ای که نباید زیاد پیام بگیرد، اسپم می‌شود و آن‌فالو می‌کند.</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- How it works -->
-  <section id="how" class="max-w-6xl mx-auto px-6 py-20 border-t border-brand-800">
-    <h2 class="text-3xl font-bold mb-4">نبض چطور تصمیم می‌گیرد؟</h2>
-    <p class="text-brand-200 max-w-2xl mb-12 leading-8">
-      داده‌ی موجود شما (سفارش، سبد، دایرکت، واتساپ) را می‌خواند، سیگنال هر مشتری را می‌سنجد
-      و یک تصمیم شفاف و قابل‌توضیح برمی‌گرداند — نه یک جعبه سیاه.
-    </p>
-    <div class="grid md:grid-cols-4 gap-4 text-sm">
-      <div class="p-5 rounded-xl bg-brand-800/40 border border-brand-700">
-        <div class="text-brand-300 font-bold mb-1">۱. داده</div>
-        سفارش، سبد، مکالمه، استوری
-      </div>
-      <div class="p-5 rounded-xl bg-brand-800/40 border border-brand-700">
-        <div class="text-brand-300 font-bold mb-1">۲. سیگنال</div>
-        ریسک ریزش، حساسیت به تخفیف/ارسال
-      </div>
-      <div class="p-5 rounded-xl bg-brand-800/40 border border-brand-700">
-        <div class="text-brand-300 font-bold mb-1">۳. تصمیم</div>
-        بهترین اقدام از بین ۹ گزینه
-      </div>
-      <div class="p-5 rounded-xl bg-brand-800/40 border border-brand-700">
-        <div class="text-brand-300 font-bold mb-1">۴. پیام</div>
-        متن فارسی آماده، مناسب کانال
-      </div>
-    </div>
+    <div class="proof-strip"><div class="container proof-inner"><span>نبض برای تصمیم‌گیری ساخته شده، نه ارسال کورکورانه</span><div class="proof-items"><span>توضیح‌پذیر</span><span>فارسی و بومی</span><span>چندکاناله</span></div></div></div>
 
-    <!-- decision card mock -->
-    <div class="mt-12 max-w-md mx-auto p-6 rounded-2xl bg-brand-800/60 border border-brand-600">
-      <div class="flex items-center justify-between mb-4">
-        <span class="text-xs text-brand-300">تصمیم برای مریم</span>
-        <span class="text-xs px-2 py-1 rounded-full bg-brand-300/20 text-brand-200">ارسال رایگان</span>
+    <section class="section" id="problem">
+      <div class="container">
+        <div class="section-heading"><div class="eyebrow">مسئلهٔ واقعی رشد</div><h2>داده زیاد است؛<br />تصمیم درست کمیاب.</h2><p class="muted">وقتی با همه یکسان رفتار می‌کنید، هم حاشیه سود از بین می‌رود، هم مشتری خوب خسته می‌شود.</p></div>
+        <div class="problem-grid">
+          <article class="problem-card"><div class="card-number">۰۱ / حاشیه سود</div><h3>تخفیف کور</h3><p>به مشتری‌ای که بدون تخفیف هم می‌خرید، تخفیف می‌دهید و سود را بی‌دلیل خرج می‌کنید.</p></article>
+          <article class="problem-card"><div class="card-number">۰۲ / بازگشت</div><h3>ریزش بی‌صدا</h3><p>مشتری در آستانهٔ رفتن است، اما پیام مناسب و به‌موقعی برای برگشتن دریافت نمی‌کند.</p></article>
+          <article class="problem-card"><div class="card-number">۰۳ / تجربه</div><h3>خستگی از پیام</h3><p>مشتری‌ای که نباید زیاد پیام بگیرد، با کمپین‌های بی‌ربط اسپم می‌شود و آن‌فالو می‌کند.</p></article>
+        </div>
       </div>
-      <p class="text-brand-50 leading-8 mb-4">
-        «سلام مریم جان، سبدت هنوز منتظرته! امروز ارسال رایگانه، دوست داری تکمیلش کنیم؟»
-      </p>
-      <div class="text-xs text-brand-300 border-t border-brand-700 pt-3">
-        دلیل: سبد هنگام دیدن هزینه ارسال رها شده و حساسیت به ارسال بالاست
+    </section>
+
+    <section class="section" id="how">
+      <div class="container">
+        <div class="section-heading"><div class="eyebrow">از داده تا اقدام</div><h2>یک تصمیم شفاف،<br />در چهار گام.</h2><p class="muted">نبض روی دادهٔ موجود شما می‌نشیند و به‌جای جعبهٔ سیاه، دلیل هر پیشنهاد را هم نشان می‌دهد.</p></div>
+        <div class="steps">
+          <article class="step"><div class="step-number">۱</div><h3>داده</h3><p>سفارش، سبد، مکالمه و تعامل مشتری را کنار هم می‌گذارد.</p></article>
+          <article class="step"><div class="step-number">۲</div><h3>سیگنال</h3><p>ریسک ریزش، حساسیت به تخفیف و کانال مناسب را می‌سنجد.</p></article>
+          <article class="step"><div class="step-number">۳</div><h3>تصمیم</h3><p>از بین ۹ اقدام، بهترین حرکت بعدی را با اولویت مشخص می‌کند.</p></article>
+          <article class="step"><div class="step-number">۴</div><h3>پیام</h3><p>متن فارسی آماده و مناسب همان مشتری و همان کانال می‌سازد.</p></article>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Personas -->
-  <section id="personas" class="max-w-6xl mx-auto px-6 py-20 border-t border-brand-800">
-    <h2 class="text-3xl font-bold mb-4">هر مشتری، تصمیم خودش</h2>
-    <div class="grid md:grid-cols-3 gap-4 text-sm mt-10">
-      <div class="p-5 rounded-xl border border-brand-700">فقط یادآوری می‌خواهد → بدون تخفیف</div>
-      <div class="p-5 rounded-xl border border-brand-700">حساس به ارسال رایگان → پیشنهاد ارسال رایگان</div>
-      <div class="p-5 rounded-xl border border-brand-700">بدون تخفیف هم می‌خرد → مشتری ویژه، بدون تخفیف</div>
-      <div class="p-5 rounded-xl border border-brand-700">سبد سنگین رهاشده → پیشنهاد BNPL</div>
-      <div class="p-5 rounded-xl border border-brand-700">نباید زیاد پیام بگیرد → سکوت</div>
-      <div class="p-5 rounded-xl border border-brand-700">ریسک ریزش امروز → پیام فوری بازگشت</div>
-    </div>
-  </section>
+    <section class="section" id="personas">
+      <div class="container split">
+        <div class="section-heading"><div class="eyebrow">شخصی‌سازی واقعی</div><div class="quote"><span class="quote-mark">“</span>همهٔ مشتری‌ها یک چیز نمی‌خواهند؛ نبض این تفاوت را می‌فهمد.</div></div>
+        <div class="personas">
+          <article class="persona-card"><div class="persona-icon">ی</div><div><h3>فقط یادآوری می‌خواهد</h3><p>یادآوری ساده، بدون خرج‌کردن تخفیف.</p></div></article>
+          <article class="persona-card"><div class="persona-icon">ا</div><div><h3>حساس به ارسال رایگان</h3><p>پیشنهاد درست برای عبور از مانع هزینه ارسال.</p></div></article>
+          <article class="persona-card"><div class="persona-icon">و</div><div><h3>در آستانهٔ ریزش</h3><p>پیام بازگشت، قبل از اینکه دیر شود.</p></div></article>
+          <article class="persona-card"><div class="persona-icon">س</div><div><h3>باید کمتر پیام بگیرد</h3><p>سکوت یا کاهش فرکانس، بخشی از تصمیم است.</p></div></article>
+        </div>
+      </div>
+    </section>
 
-  <!-- CTA -->
-  <section id="cta" class="max-w-4xl mx-auto px-6 py-24 text-center border-t border-brand-800">
-    <h2 class="text-3xl md:text-4xl font-bold mb-4">آماده‌اید نبض فروشگاهتان را بگیرید؟</h2>
-    <p class="text-brand-200 mb-10 leading-8">
-      نسخه‌ی اول برای فروشگاه‌های اینستاگرامی و آنلاین‌شاپ‌های کوچک و متوسط است.
-    </p>
-    <a href="mailto:hello@nabz.example" class="inline-block px-10 py-4 rounded-xl bg-brand-300 text-brand-900 font-bold hover:bg-white transition">
-      درخواست دمو
-    </a>
-  </section>
+    <section class="section cta" id="start">
+      <div class="container"><div class="eyebrow">قدم بعدی</div><h2>فروشگاهتان را با<br /><span class="highlight">تصمیم بهتر</span> رشد دهید.</h2><p>اگر می‌خواهید بدانید نبض برای داده‌های فروشگاه شما چه تصمیم‌هایی می‌سازد، ایمیل‌تان را بگذارید تا گفت‌وگو را شروع کنیم.</p><form class="cta-form" id="demoForm"><input id="email" name="email" type="email" placeholder="ایمیل کاری شما" aria-label="ایمیل کاری شما" required /><button class="button-primary" type="submit">درخواست دمو</button></form><div class="form-message" id="formMessage" role="status" aria-live="polite"></div></div>
+    </section>
+  </main>
 
-  <footer class="max-w-6xl mx-auto px-6 py-10 text-center text-brand-400 text-sm border-t border-brand-800">
-    نبض — تصمیم بعدی برای هر مشتری
-  </footer>
+  <footer><div class="container footer-inner"><span>نبض — تصمیم بعدی برای هر مشتری</span><span>برای خرده‌فروشی که می‌خواهد هوشمندتر رشد کند.</span></div></footer>
 
+  <script>
+    const menuButton = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('#navLinks');
+    menuButton.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      menuButton.setAttribute('aria-expanded', String(isOpen));
+    });
+    navLinks.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuButton.setAttribute('aria-expanded', 'false');
+    }));
+    document.querySelector('#demoForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const email = document.querySelector('#email').value;
+      document.querySelector('#formMessage').textContent = `ممنونیم. درخواست شما با ایمیل ${email} ثبت شد.`;
+      event.target.reset();
+    });
+  </script>
 </body>
 </html>
