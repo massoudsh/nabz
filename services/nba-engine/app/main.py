@@ -4,12 +4,21 @@ from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, HTTPException
 
-from app import decision_store, feedback_store
+from app import decision_store, feedback_store, integration_store
 from app.admin import router as admin_router
 from app.auth import require_api_key
 from app.db import init_db
 from app.engine import decide
-from app.models import CampaignFeedback, Customer, Decision
+from app.models import (
+    CampaignFeedback,
+    CampaignReport,
+    ConversationIngest,
+    Customer,
+    CustomerSnapshot,
+    Decision,
+    StorefrontCartIngest,
+    StorefrontOrderIngest,
+)
 
 
 @asynccontextmanager
@@ -60,3 +69,52 @@ def get_feedback(customer_id: str) -> list[CampaignFeedback]:
     if not history:
         raise HTTPException(status_code=404, detail="بازخوردی برای این مشتری ثبت نشده")
     return history
+
+
+@app.post("/integrations/conversations", response_model=ConversationIngest, dependencies=[Depends(require_api_key)])
+def ingest_conversation(event: ConversationIngest) -> ConversationIngest:
+    return integration_store.record_conversation(event)
+
+
+@app.post("/integrations/storefront/orders", response_model=StorefrontOrderIngest, dependencies=[Depends(require_api_key)])
+def ingest_storefront_order(event: StorefrontOrderIngest) -> StorefrontOrderIngest:
+    return integration_store.record_order(event)
+
+
+@app.post("/integrations/storefront/cart", response_model=StorefrontCartIngest, dependencies=[Depends(require_api_key)])
+def ingest_storefront_cart(event: StorefrontCartIngest) -> StorefrontCartIngest:
+    return integration_store.record_cart(event)
+
+
+@app.get("/integrations/customers/{customer_id}", response_model=CustomerSnapshot, dependencies=[Depends(require_api_key)])
+def get_customer_snapshot(customer_id: str) -> CustomerSnapshot:
+    snapshot = integration_store.get_customer_snapshot(customer_id)
+    if snapshot is None:
+        raise HTTPException(status_code=404, detail="مشتری در داده‌های همگام‌شده پیدا نشد")
+    return snapshot
+
+
+@app.post("/integrations/customers/{customer_id}/decide", response_model=Decision, dependencies=[Depends(require_api_key)])
+def decide_from_integrations(customer_id: str) -> Decision:
+    snapshot = integration_store.get_customer_snapshot(customer_id)
+    if snapshot is None:
+        raise HTTPException(status_code=404, detail="مشتری در داده‌های همگام‌شده پیدا نشد")
+    decision = decide(snapshot.customer)
+    decision_store.log_decision(decision)
+    return decision
+
+
+@app.get("/reports/campaigns", response_model=CampaignReport, dependencies=[Depends(require_api_key)])
+def campaign_report() -> CampaignReport:
+    decisions = decision_store.status_counts()
+    feedback = feedback_store.summary()
+    return CampaignReport(
+        total_decisions=decisions["total"],
+        approved_decisions=decisions["approved"],
+        rejected_decisions=decisions["rejected"],
+        pending_decisions=decisions["pending"],
+        feedback_count=feedback["feedback_count"],
+        opened_count=feedback["opened_count"],
+        purchased_count=feedback["purchased_count"],
+        purchase_rate=feedback["purchase_rate"],
+    )

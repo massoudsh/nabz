@@ -100,3 +100,13 @@ def set_status(decision_id: str, status: str) -> bool:
         row.status = status
         session.commit()
         return True
+
+
+def status_counts() -> dict[str, int]:
+    with SessionLocal() as session:
+        rows = session.query(DecisionRecord).all()
+    counts = {status: 0 for status in VALID_STATUSES}
+    for row in rows:
+        counts[row.status] = counts.get(row.status, 0) + 1
+    counts["total"] = len(rows)
+    return counts

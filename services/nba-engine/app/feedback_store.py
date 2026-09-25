@@ -66,11 +66,7 @@ def list_for_customer(customer_id: str) -> list[CampaignFeedback]:
 
 
 def purchase_rate_for_action(action: Action, min_samples: int = 3) -> float | None:
-    """نرخ خرید واقعی (purchased=true) برای یک اقدام، در صورت داشتن نمونه‌ی کافی.
-
-    برای امتیازدهی تطبیقی فاز ۲ در app/engine.py استفاده می‌شود؛ اگر نمونه کافی
-    نباشد ``None`` برمی‌گرداند تا موتور به مقدار پیش‌فرض ثابت برگردد.
-    """
+    """نرخ خرید واقعی (purchased=true) برای یک اقدام، در صورت داشتن نمونه‌ی کافی."""
     with SessionLocal() as session:
         rows = (
             session.query(CampaignHistoryRecord)
@@ -80,3 +76,16 @@ def purchase_rate_for_action(action: Action, min_samples: int = 3) -> float | No
     if len(rows) < min_samples:
         return None
     return sum(1 for r in rows if r.purchased) / len(rows)
+
+
+def summary() -> dict[str, int | float]:
+    with SessionLocal() as session:
+        rows = session.query(CampaignHistoryRecord).all()
+    total = len(rows)
+    purchased = sum(1 for row in rows if row.purchased)
+    return {
+        "feedback_count": total,
+        "opened_count": sum(1 for row in rows if row.opened),
+        "purchased_count": purchased,
+        "purchase_rate": purchased / total if total else 0,
+    }

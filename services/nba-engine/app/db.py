@@ -27,6 +27,6 @@ class Base(DeclarativeBase):
 
 def init_db() -> None:
     """ساخت جدول‌ها در صورت نبود — روی FastAPI startup صدا زده می‌شود."""
-    from app import decision_store, feedback_store  # noqa: F401  (ثبت مدل‌ها روی Base)
+    from app import decision_store, feedback_store, integration_store  # noqa: F401
 
     Base.metadata.create_all(bind=engine)

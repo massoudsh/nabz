@@ -52,6 +52,12 @@ curl -X POST http://127.0.0.1:8000/decide -H "X-API-Key: dev-key-1" -d '...'
 | `POST /decide/batch` | تصمیم برای لیستی از مشتری‌ها یکجا |
 | `POST /feedback` | ثبت نتیجه‌ی واقعی یک اقدام (باز شد/خرید شد) |
 | `GET /feedback/{customer_id}` | بازخوانی تاریخچه‌ی بازخورد یک مشتری |
+| `POST /integrations/conversations` | دریافت رویداد دایرکت اینستاگرام/واتساپ بیزینس از adapter رسمی و ذخیره در snapshot مشتری |
+| `POST /integrations/storefront/orders` | دریافت سفارش از فروشگاه‌ساز و ذخیره در snapshot مشتری |
+| `POST /integrations/storefront/cart` | دریافت وضعیت سبد از فروشگاه‌ساز و ذخیره آخرین سبد مشتری |
+| `GET /integrations/customers/{customer_id}` | بازخوانی snapshot مشتری ساخته‌شده از داده‌های همگام‌شده |
+| `POST /integrations/customers/{customer_id}/decide` | تصمیم‌گیری مستقیم روی snapshot ذخیره‌شده و لاگ تصمیم |
+| `GET /reports/campaigns` | گزارش خلاصه تصمیم‌ها، تایید/ردها و نرخ خرید بازخوردها |
 | `GET /admin` | داشبورد HTML — لیست تصمیم‌ها + فیلتر وضعیت |
 | `POST /admin/decisions/{id}/approve` | تایید یک تصمیم |
 | `POST /admin/decisions/{id}/reject` | رد یک تصمیم |
@@ -111,6 +117,7 @@ app/
   channels.py         # قالب پیام فارسی به تفکیک کانال
   db.py                # اتصال SQLAlchemy (Postgres/SQLite بر اساس DATABASE_URL)
   feedback_store.py   # جدول CampaignHistory (پایدار)
+  integration_store.py # ذخیره رویدادهای کانال/فروشگاه‌ساز و ساخت Customer snapshot
   decision_store.py   # لاگ تصمیم‌ها برای پنل مدیریتی (approve/reject)
   auth.py             # احراز هویت API key
   admin.py             # روتر پنل مدیریتی (/admin)

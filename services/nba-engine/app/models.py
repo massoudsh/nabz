@@ -103,10 +103,7 @@ class Decision(BaseModel):
 
 
 class CampaignFeedback(BaseModel):
-    """نتیجه‌ی واقعی یک اقدام پیشنهادی — docs/ARCHITECTURE.md بخش ۲ (CampaignHistory).
-
-    فاز MVP فقط این بازخورد را ذخیره می‌کند؛ استفاده در امتیازدهی تطبیقی، فاز ۲ است.
-    """
+    """نتیجه‌ی واقعی یک اقدام پیشنهادی — docs/ARCHITECTURE.md بخش ۲ (CampaignHistory)."""
 
     customer_id: str
     action: Action
@@ -114,3 +111,63 @@ class CampaignFeedback(BaseModel):
     opened: bool = False
     purchased: bool = False
     sent_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class ConversationProvider(str, Enum):
+    INSTAGRAM_GRAPH = "instagram_graph"
+    WHATSAPP_BUSINESS = "whatsapp_business"
+
+
+class StorefrontProvider(str, Enum):
+    GENERIC = "generic"
+    WOOCOMMERCE = "woocommerce"
+    SHOPIFY = "shopify"
+
+
+class ConversationIngest(BaseModel):
+    provider: ConversationProvider
+    customer_id: str
+    text: str = ""
+    channel: Channel
+    intent: ConversationIntent = ConversationIntent.NONE
+    occurred_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    customer_name: str = "مشتری"
+    opted_out: bool = False
+
+
+class StorefrontOrderIngest(BaseModel):
+    provider: StorefrontProvider = StorefrontProvider.GENERIC
+    customer_id: str
+    order_id: str
+    amount: float = Field(..., ge=0)
+    used_discount_code: bool = False
+    ordered_at: date
+    customer_name: str = "مشتری"
+
+
+class StorefrontCartIngest(BaseModel):
+    provider: StorefrontProvider = StorefrontProvider.GENERIC
+    customer_id: str
+    status: CartStatus = CartStatus.NONE
+    items_value: float = Field(0, ge=0)
+    abandon_stage: AbandonStage = AbandonStage.NONE
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    distinct_categories: int = Field(0, ge=0)
+    customer_name: str = "مشتری"
+
+
+class CustomerSnapshot(BaseModel):
+    customer: Customer
+    order_count: int
+    conversation_count: int
+
+
+class CampaignReport(BaseModel):
+    total_decisions: int
+    approved_decisions: int
+    rejected_decisions: int
+    pending_decisions: int
+    feedback_count: int
+    opened_count: int
+    purchased_count: int
+    purchase_rate: float

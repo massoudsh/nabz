@@ -34,9 +34,11 @@
                      └─────────────────────────┘
 ```
 
-در فاز MVP فقط سه بخش میانی (Signal Extraction → Decision Engine → Channel & Message Gen)
-به‌صورت یک سرویس API واحد (`services/nba-engine`) پیاده‌سازی شده‌اند؛ ورودی/خروجی به شکل JSON است
-تا اتصال به هر منبع داده‌ی واقعی در فاز ۱ ساده باشد.
+در فاز MVP سه بخش میانی (Signal Extraction → Decision Engine → Channel & Message Gen)
+به‌صورت یک سرویس API واحد (`services/nba-engine`) پیاده‌سازی شده‌اند. علاوه بر ورودی مستقیم
+JSON، لایه‌ی ingestion برای دریافت رویدادهای دایرکت/واتساپ و فروشگاه‌ساز اضافه شده است:
+رویدادها در snapshot مشتری ذخیره می‌شوند و endpoint تصمیم‌گیری می‌تواند روی همان snapshot اجرا شود.
+اتصال production همچنان باید از APIهای رسمی هر پلتفرم و adapter مجاز همان فروشگاه‌ساز تغذیه شود.
 
 ## ۲. مدل داده (Schema)
 
@@ -137,7 +139,7 @@
 - **زبان/فریم‌ورک:** Python 3.12 + FastAPI (سبک، مستندسازی خودکار OpenAPI، مناسب سرویس تصمیم‌ساز).
 - **اعتبارسنجی داده:** Pydantic.
 - **تست:** pytest.
-- **دیتابیس:** SQLAlchemy با `DATABASE_URL` قابل‌تنظیم — Postgres در production، SQLite برای توسعه/تست محلی (بدون نیاز به سرور دیتابیس). جدول‌های `campaign_history` (CampaignHistory) و `decisions` (لاگ پنل مدیریتی) در startup ساخته می‌شوند.
+- **دیتابیس:** SQLAlchemy با `DATABASE_URL` قابل‌تنظیم — Postgres در production، SQLite برای توسعه/تست محلی (بدون نیاز به سرور دیتابیس). جدول‌های `campaign_history` (CampaignHistory)، `decisions` (لاگ پنل مدیریتی)، `customer_profiles`، `ingested_orders`، `ingested_carts` و `ingested_conversations` در startup ساخته می‌شوند.
 - **استقرار:** طبق راهنمای بیلد پروژه، بیلد نهایی روی سرور SSH انجام می‌شود، نه داخل کانتینر توسعه — جزئیات کامل در `docs/DEPLOYMENT.md`.
 
 ## ۷. نکات امنیتی و حریم خصوصی
