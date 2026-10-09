@@ -1,76 +1,143 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>پنل مدیریتی نبض</title>
-<link rel="preconnect" href="https://cdn.jsdelivr.net" />
-<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        fontFamily: { vazir: ['Vazirmatn', 'sans-serif'] },
-        colors: {
-          brand: {
-            50: '#f2f7f5', 100: '#dcebe4', 200: '#b9d7c9',
-            300: '#8fbeaa', 400: '#5f9d85', 500: '#3f7f68',
-            600: '#2f6552', 700: '#265042', 800: '#204035', 900: '#1b352c',
-          }
-        }
-      }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b0e12" />
+  <title>نبض | مرکز تصمیم‌ها</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0e12;
+      --surface: #11161c;
+      --surface-raised: #171d25;
+      --text: #f3f5f7;
+      --muted: #98a1ad;
+      --subtle: #6e7885;
+      --border: rgba(255, 255, 255, .1);
+      --accent: #e8b76a;
+      --accent-soft: rgba(232, 183, 106, .13);
+      --green: #7ed7ad;
+      --green-soft: rgba(126, 215, 173, .13);
+      --red: #f28d8d;
+      --red-soft: rgba(242, 141, 141, .13);
+      --yellow: #f1cf79;
+      --yellow-soft: rgba(241, 207, 121, .13);
+      --radius: 18px;
     }
-  }
-</script>
-<style>body { font-family: 'Vazirmatn', sans-serif; }</style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 320px; background: var(--bg); color: var(--text); font-family: Vazirmatn, Tahoma, sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+    body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .28; background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px); background-size: 64px 64px; mask-image: linear-gradient(to bottom, black, transparent 75%); }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    .shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; position: relative; }
+    .topbar { border-bottom: 1px solid var(--border); background: rgba(11,14,18,.82); backdrop-filter: blur(18px); }
+    .topbar-inner { min-height: 74px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display: flex; align-items: center; gap: 11px; font-size: 1.12rem; font-weight: 800; }
+    .brand-mark { position: relative; width: 27px; height: 27px; border: 2px solid var(--accent); border-radius: 50%; }
+    .brand-mark::after { content: ""; position: absolute; top: 8px; right: 8px; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 16px var(--accent); }
+    .top-meta { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: .77rem; }
+    .live { display: inline-flex; align-items: center; gap: 7px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 99px; }
+    .live::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px rgba(126,215,173,.1); }
+    main { padding: 58px 0 72px; }
+    .hero { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 34px; }
+    .eyebrow { color: var(--accent); font-size: .73rem; font-weight: 800; letter-spacing: .035em; margin: 0 0 7px; }
+    h1 { font-size: clamp(1.85rem, 4vw, 2.8rem); line-height: 1.25; letter-spacing: -.035em; margin: 0; }
+    .hero-copy { color: var(--muted); font-size: .88rem; margin: 9px 0 0; }
+    .total { border: 1px solid var(--border); border-radius: 13px; padding: 9px 13px; color: var(--muted); font-size: .78rem; white-space: nowrap; }
+    .total b { color: var(--text); font-size: 1rem; margin-right: 5px; }
+    .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 30px; }
+    .metric { min-height: 112px; padding: 18px; border: 1px solid var(--border); border-radius: var(--radius); background: rgba(255,255,255,.028); }
+    .metric-label { color: var(--muted); font-size: .77rem; display: block; }
+    .metric-value { display: block; font-size: 1.75rem; font-weight: 800; letter-spacing: -.04em; margin-top: 3px; }
+    .metric-detail { color: var(--subtle); font-size: .67rem; }
+    .metric.pending .metric-value { color: var(--yellow); }
+    .metric.approved .metric-value { color: var(--green); }
+    .metric.rejected .metric-value { color: var(--red); }
+    .panel { border: 1px solid var(--border); border-radius: 22px; overflow: hidden; background: rgba(17,22,28,.7); box-shadow: 0 24px 70px rgba(0,0,0,.2); }
+    .panel-top { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 19px 20px; border-bottom: 1px solid var(--border); }
+    .panel-top h2 { margin: 0; font-size: 1rem; }
+    .panel-top p { margin: 2px 0 0; color: var(--subtle); font-size: .7rem; }
+    .filters { display: flex; flex-wrap: wrap; gap: 7px; }
+    .filter { border: 1px solid var(--border); color: var(--muted); border-radius: 9px; padding: 6px 10px; font-size: .72rem; transition: .2s; }
+    .filter:hover { color: var(--text); background: var(--surface-raised); }
+    .filter.active { color: #1d1710; background: var(--accent); border-color: var(--accent); font-weight: 800; }
+    .decisions { padding: 10px; }
+    .decision { display: grid; grid-template-columns: minmax(170px, .78fr) minmax(250px, 1.65fr) minmax(150px, .8fr) auto; gap: 16px; align-items: center; padding: 17px 12px; border-bottom: 1px solid var(--border); }
+    .decision:last-child { border-bottom: 0; }
+    .identity { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .avatar { width: 34px; height: 34px; display: grid; place-items: center; flex: 0 0 34px; border-radius: 11px; background: var(--accent-soft); color: var(--accent); font-size: .78rem; font-weight: 800; }
+    .customer-id { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .84rem; font-weight: 700; }
+    .time { color: var(--subtle); display: block; font-size: .65rem; margin-top: 2px; }
+    .message { color: #d5dae0; font-size: .8rem; line-height: 1.85; }
+    .tags { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+    .tag { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 99px; padding: 4px 8px; background: rgba(255,255,255,.06); color: var(--muted); font-size: .65rem; }
+    .tag.action { color: var(--accent); background: var(--accent-soft); }
+    .status { display: inline-flex; align-items: center; gap: 6px; font-size: .67rem; font-weight: 700; }
+    .status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; }
+    .status.pending { color: var(--yellow); }.status.pending::before { background: var(--yellow); }
+    .status.approved { color: var(--green); }.status.approved::before { background: var(--green); }
+    .status.rejected { color: var(--red); }.status.rejected::before { background: var(--red); }
+    .actions { display: flex; gap: 6px; }
+    .action { border: 0; border-radius: 8px; padding: 7px 10px; font-size: .68rem; font-weight: 800; cursor: pointer; transition: transform .18s, background .18s; }
+    .action:hover { transform: translateY(-1px); }
+    .approve { background: var(--green-soft); color: var(--green); }.approve:hover { background: rgba(126,215,173,.23); }
+    .reject { background: var(--red-soft); color: var(--red); }.reject:hover { background: rgba(242,141,141,.23); }
+    .empty { padding: 72px 25px; text-align: center; }.empty-icon { display: grid; place-items: center; width: 45px; height: 45px; margin: 0 auto 13px; border: 1px solid var(--border); border-radius: 15px; color: var(--accent); font-weight: 800; }.empty h2 { margin: 0 0 5px; font-size: 1rem; }.empty p { max-width: 380px; color: var(--muted); font-size: .8rem; margin: 0 auto; }
+    @media (max-width: 900px) { .metrics { grid-template-columns: repeat(2, 1fr); }.decision { grid-template-columns: 1fr auto; }.message { grid-column: 1 / -1; grid-row: 2; }.tags { grid-column: 1; grid-row: 3; flex-direction: row; align-items: center; }.actions { grid-column: 2; grid-row: 3; } }
+    @media (max-width: 640px) { .shell { width: min(100% - 28px, 560px); }.top-meta > span { display: none; }.topbar-inner { min-height: 66px; }.hero { align-items: flex-start; flex-direction: column; margin-bottom: 25px; }.metrics { gap: 9px; margin-bottom: 22px; }.metric { min-height: 98px; padding: 14px; }.metric-value { font-size: 1.45rem; }.panel-top { align-items: flex-start; flex-direction: column; }.decision { gap: 12px; padding: 15px 8px; }.tags { flex-wrap: wrap; }.message { font-size: .76rem; }.total { padding: 7px 10px; } }
+  </style>
 </head>
-<body class="bg-brand-900 text-brand-50 antialiased min-h-screen p-6">
-
-  <header class="max-w-5xl mx-auto mb-6 flex items-center justify-between">
-    <h1 class="text-2xl font-bold">پنل مدیریتی نبض — لیست تصمیم‌ها</h1>
-    <nav class="flex gap-2 text-sm">
-      {% for label, value in [('همه', ''), ('در انتظار', 'pending'), ('تاییدشده', 'approved'), ('ردشده', 'rejected')] %}
-      <a href="/admin?status={{ value }}&api_key={{ api_key }}"
-         class="px-3 py-1 rounded-full border {{ 'bg-brand-500 border-brand-500' if status_filter == value else 'border-brand-600 hover:bg-brand-800' }}">
-        {{ label }}
-      </a>
-      {% endfor %}
-    </nav>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="/admin?api_key={{ api_key }}" aria-label="مرکز تصمیم‌های نبض"><span class="brand-mark" aria-hidden="true"></span><span>نبض</span></a>
+      <div class="top-meta"><span>مرکز عملیات فروشگاه</span><span class="live">سیستم آماده است</span></div>
+    </div>
   </header>
 
-  <main class="max-w-5xl mx-auto space-y-3">
-    {% if not decisions %}
-      <p class="text-brand-300">هنوز هیچ تصمیمی ثبت نشده — با فراخوانی POST /decide یا /decide/batch اینجا پر می‌شود.</p>
-    {% endif %}
+  <main class="shell">
+    <section class="hero">
+      <div><p class="eyebrow">پنل مدیریتی · مرکز تصمیم‌ها</p><h1>هر تصمیم، در زمان درست.</h1><p class="hero-copy">پیشنهادهای نبض را مرور کنید، تایید کنید یا برای بازبینی رد کنید.</p></div>
+      <div class="total">کل تصمیم‌ها <b>{{ counts.total }}</b></div>
+    </section>
 
-    {% for d in decisions %}
-    <div class="bg-brand-800/60 border border-brand-700 rounded-xl p-4">
-      <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-        <div>
-          <span class="font-semibold">{{ d.customer_id }}</span>
-          <span class="text-brand-300 text-sm">— {{ d.action }} · {{ d.channel }} · اطمینان {{ d.confidence }}</span>
-        </div>
-        <span class="text-xs px-2 py-1 rounded-full
-          {% if d.status == 'approved' %}bg-green-700
-          {% elif d.status == 'rejected' %}bg-red-700
-          {% else %}bg-yellow-700{% endif %}">
-          {{ d.status }}
-        </span>
+    <section class="metrics" aria-label="خلاصه وضعیت تصمیم‌ها">
+      <div class="metric"><span class="metric-label">همه تصمیم‌ها</span><strong class="metric-value">{{ counts.total }}</strong><span class="metric-detail">ثبت‌شده در سیستم</span></div>
+      <div class="metric pending"><span class="metric-label">در انتظار بررسی</span><strong class="metric-value">{{ counts.pending }}</strong><span class="metric-detail">نیازمند تصمیم شما</span></div>
+      <div class="metric approved"><span class="metric-label">تاییدشده</span><strong class="metric-value">{{ counts.approved }}</strong><span class="metric-detail">آماده اقدام</span></div>
+      <div class="metric rejected"><span class="metric-label">ردشده</span><strong class="metric-value">{{ counts.rejected }}</strong><span class="metric-detail">برای بررسی بعدی</span></div>
+    </section>
+
+    <section class="panel" aria-labelledby="decisions-heading">
+      <div class="panel-top">
+        <div><h2 id="decisions-heading">صف تصمیم‌ها</h2><p>به‌روزرسانی‌شده بر اساس آخرین داده‌های فروشگاه</p></div>
+        <nav class="filters" aria-label="فیلتر وضعیت">
+          {% for label, value in [('همه', ''), ('در انتظار', 'pending'), ('تاییدشده', 'approved'), ('ردشده', 'rejected')] %}
+          <a href="/admin?status={{ value }}&api_key={{ api_key }}" class="filter {{ 'active' if status_filter == value else '' }}">{{ label }}</a>
+          {% endfor %}
+        </nav>
       </div>
-      <p class="text-brand-100 mb-3">{{ d.message_fa }}</p>
-      {% if d.status == 'pending' %}
-      <div class="flex gap-2">
-        <form method="post" action="/admin/decisions/{{ d.id }}/approve?api_key={{ api_key }}">
-          <button class="px-3 py-1 rounded-lg bg-brand-500 hover:bg-brand-400 text-sm">تایید</button>
-        </form>
-        <form method="post" action="/admin/decisions/{{ d.id }}/reject?api_key={{ api_key }}">
-          <button class="px-3 py-1 rounded-lg bg-red-800 hover:bg-red-700 text-sm">رد</button>
-        </form>
+
+      {% if decisions %}
+      <div class="decisions">
+        {% for d in decisions %}
+        <article class="decision">
+          <div class="identity"><div class="avatar">{{ d.customer_id[0]|upper }}</div><div><span class="customer-id">{{ d.customer_id }}</span><time class="time" datetime="{{ d.created_at.isoformat() }}">{{ d.created_at.strftime('%Y/%m/%d · %H:%M') }}</time></div></div>
+          <div class="message">{{ d.message_fa }}</div>
+          <div class="tags"><span class="tag action">{{ d.action }}</span><span class="tag">{{ d.channel }} · اطمینان {{ '%.0f'|format(d.confidence * 100) }}٪</span><span class="status {{ d.status }}">{{ {'pending': 'در انتظار', 'approved': 'تایید شده', 'rejected': 'رد شده'}[d.status] }}</span></div>
+          {% if d.status == 'pending' %}
+          <div class="actions"><form method="post" action="/admin/decisions/{{ d.id }}/approve?api_key={{ api_key }}"><button class="action approve" type="submit">تایید</button></form><form method="post" action="/admin/decisions/{{ d.id }}/reject?api_key={{ api_key }}"><button class="action reject" type="submit">رد</button></form></div>
+          {% else %}<div></div>{% endif %}
+        </article>
+        {% endfor %}
       </div>
+      {% else %}
+      <div class="empty"><div class="empty-icon">۰</div><h2>هنوز تصمیمی در این بخش نیست</h2><p>با فراخوانی <code>POST /decide</code> یا تصمیم‌گیری روی داده همگام‌شده، پیشنهادها اینجا نمایش داده می‌شوند.</p></div>
       {% endif %}
-    </div>
-    {% endfor %}
+    </section>
   </main>
 </body>
 </html>

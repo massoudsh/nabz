@@ -35,6 +35,7 @@ def admin_dashboard(
             "decisions": decisions,
             "status_filter": status or "",
             "api_key": api_key or "",
+            "counts": decision_store.status_counts(),
         },
     )
 
