@@ -58,6 +58,10 @@ curl -X POST http://127.0.0.1:8000/decide -H "X-API-Key: dev-key-1" -d '...'
 | `GET /integrations/customers/{customer_id}` | بازخوانی snapshot مشتری ساخته‌شده از داده‌های همگام‌شده |
 | `POST /integrations/customers/{customer_id}/decide` | تصمیم‌گیری مستقیم روی snapshot ذخیره‌شده و لاگ تصمیم |
 | `GET /reports/campaigns` | گزارش خلاصه تصمیم‌ها، تایید/ردها و نرخ خرید بازخوردها |
+| `GET /demo/customers` | ۶ سناریوی ساختگی فارسی برای تست موتور |
+| `GET /demo/decisions` | خروجی موتور برای همه سناریوهای دمو |
+| `GET /demo/overview` | مشتری‌ها، تصمیم‌ها و شمارش اقدام‌ها برای داشبورد دمو |
+| `POST /demo/customers/{customer_id}/decide` | اجرای موتور و ثبت تصمیم برای یک سناریوی دمو |
 | `GET /admin` | داشبورد HTML — لیست تصمیم‌ها + فیلتر وضعیت |
 | `POST /admin/decisions/{id}/approve` | تایید یک تصمیم |
 | `POST /admin/decisions/{id}/reject` | رد یک تصمیم |

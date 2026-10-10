@@ -171,3 +171,9 @@ class CampaignReport(BaseModel):
     opened_count: int
     purchased_count: int
     purchase_rate: float
+
+
+class DemoOverview(BaseModel):
+    customers: list[Customer]
+    decisions: list[Decision]
+    action_counts: dict[str, int]

@@ -3,6 +3,7 @@ import Link from "next/link";
 const navigation = [
   { href: "/product", label: "محصول" },
   { href: "/how-it-works", label: "چطور کار می‌کند" },
+  { href: "/demo", label: "دموی موتور" },
   { href: "/pricing", label: "پلن‌ها" },
 ];
 

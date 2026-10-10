@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, HTTPException
 
-from app import decision_store, feedback_store, integration_store
+from app import decision_store, demo, feedback_store, integration_store
 from app.admin import router as admin_router
 from app.auth import require_api_key
 from app.db import init_db
@@ -16,6 +16,7 @@ from app.models import (
     Customer,
     CustomerSnapshot,
     Decision,
+    DemoOverview,
     StorefrontCartIngest,
     StorefrontOrderIngest,
 )
@@ -100,6 +101,31 @@ def decide_from_integrations(customer_id: str) -> Decision:
     if snapshot is None:
         raise HTTPException(status_code=404, detail="مشتری در داده‌های همگام‌شده پیدا نشد")
     decision = decide(snapshot.customer)
+    decision_store.log_decision(decision)
+    return decision
+
+
+@app.get("/demo/customers", response_model=list[Customer], dependencies=[Depends(require_api_key)])
+def demo_customers() -> list[Customer]:
+    return demo.customers()
+
+
+@app.get("/demo/decisions", response_model=list[Decision], dependencies=[Depends(require_api_key)])
+def demo_decisions() -> list[Decision]:
+    return demo.decisions()
+
+
+@app.get("/demo/overview", response_model=DemoOverview, dependencies=[Depends(require_api_key)])
+def demo_overview() -> DemoOverview:
+    return demo.overview()
+
+
+@app.post("/demo/customers/{customer_id}/decide", response_model=Decision, dependencies=[Depends(require_api_key)])
+def decide_demo_customer(customer_id: str) -> Decision:
+    customer = demo.customer_by_id(customer_id)
+    if customer is None:
+        raise HTTPException(status_code=404, detail="سناریوی دمو پیدا نشد")
+    decision = decide(customer)
     decision_store.log_decision(decision)
     return decision
 
