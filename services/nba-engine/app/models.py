@@ -177,3 +177,38 @@ class DemoOverview(BaseModel):
     customers: list[Customer]
     decisions: list[Decision]
     action_counts: dict[str, int]
+
+
+class CampaignSimulationRequest(BaseModel):
+    customer_ids: list[str] = Field(min_length=1)
+    gross_margin_rate: float = Field(0.35, ge=0, le=1)
+    free_shipping_cost: float = Field(75000, ge=0)
+    discount_rate: float = Field(0.10, ge=0, le=1)
+    cashback_rate: float = Field(0.08, ge=0, le=1)
+    win_back_rate: float = Field(0.15, ge=0, le=1)
+    minimum_expected_profit: float = Field(0, ge=0)
+
+
+class CampaignSimulationItem(BaseModel):
+    customer_id: str
+    customer_name: str
+    action: Action
+    channel: Channel
+    basket_value: float
+    confidence: float
+    incentive_cost: float
+    expected_revenue: float
+    expected_profit: float
+    is_profitable: bool
+    guardrail_reason: str
+
+
+class CampaignSimulation(BaseModel):
+    customer_count: int
+    eligible_count: int
+    held_count: int
+    projected_revenue: float
+    incentive_cost: float
+    projected_profit: float
+    protected_margin: float
+    items: list[CampaignSimulationItem]

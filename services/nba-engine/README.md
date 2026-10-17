@@ -62,6 +62,7 @@ curl -X POST http://127.0.0.1:8000/decide -H "X-API-Key: dev-key-1" -d '...'
 | `GET /demo/decisions` | خروجی موتور برای همه سناریوهای دمو |
 | `GET /demo/overview` | مشتری‌ها، تصمیم‌ها و شمارش اقدام‌ها برای داشبورد دمو |
 | `POST /demo/customers/{customer_id}/decide` | اجرای موتور و ثبت تصمیم برای یک سناریوی دمو |
+| `POST /demo/simulations` | پیش‌بینی درآمد، هزینه مشوق و سود کمپین دمو با محافظ سودآوری |
 | `GET /admin` | داشبورد HTML — لیست تصمیم‌ها + فیلتر وضعیت |
 | `POST /admin/decisions/{id}/approve` | تایید یک تصمیم |
 | `POST /admin/decisions/{id}/reject` | رد یک تصمیم |

@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, HTTPException
 
-from app import decision_store, demo, feedback_store, integration_store
+from app import campaign_simulator, decision_store, demo, feedback_store, integration_store
 from app.admin import router as admin_router
 from app.auth import require_api_key
 from app.db import init_db
@@ -12,6 +12,8 @@ from app.engine import decide
 from app.models import (
     CampaignFeedback,
     CampaignReport,
+    CampaignSimulation,
+    CampaignSimulationRequest,
     ConversationIngest,
     Customer,
     CustomerSnapshot,
@@ -128,6 +130,11 @@ def decide_demo_customer(customer_id: str) -> Decision:
     decision = decide(customer)
     decision_store.log_decision(decision)
     return decision
+
+
+@app.post("/demo/simulations", response_model=CampaignSimulation, dependencies=[Depends(require_api_key)])
+def simulate_demo_campaign(request: CampaignSimulationRequest) -> CampaignSimulation:
+    return campaign_simulator.simulate_demo_campaign(request)
 
 
 @app.get("/reports/campaigns", response_model=CampaignReport, dependencies=[Depends(require_api_key)])
