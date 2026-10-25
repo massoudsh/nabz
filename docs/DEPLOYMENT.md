@@ -60,15 +60,18 @@ WantedBy=multi-user.target
 (با TLS). `X-API-Key` باید توسط مصرف‌کننده‌های API ارسال شود؛ `/admin` هم با همان
 کلید از طریق پارامتر `?api_key=` در مرورگر قابل دسترسی است.
 
-## ۳. استقرار لندینگ (`apps/landing`)
+## ۳. استقرار فرانت‌اند عمومی (`apps/web`)
 
-فایل استاتیک (`index.html`) نیاز به بیلد ندارد — مستقیم روی هر static hosting
-(nginx، Cloudflare Pages، یا کنار همان سرور nba-engine با nginx) قابل serve است.
+فرانت‌اند Next.js مسیر اصلی معرفی محصول و دمو است. بیلد production را روی سرور SSH اجرا کنید:
 
 ```bash
-# نمونه با nginx: کپی فایل به webroot دامنه‌ی لندینگ
-cp apps/landing/index.html /var/www/nabz-landing/index.html
+cd /path/on/server/nabz/apps/web
+npm ci
+npm run build
+npm run start
 ```
+
+برای reverse proxy، سرویس Next.js را پشت nginx/caddy و با TLS منتشر کنید.
 
 ## ۴. چک‌لیست پیش از استقرار عمومی
 

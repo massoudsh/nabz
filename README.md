@@ -15,7 +15,7 @@ services/
   nba-engine/        # سرویس API موتور Next-Best-Action (Python/FastAPI، MVP)
 
 apps/
-  landing/            # لندینگ استاتیک برای اعتبارسنجی ایده
+  web/              # فرانت‌اند عمومی Next.js برای مشتریان و ذی‌نفعان
 ```
 
 ## شروع سریع
@@ -27,9 +27,11 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/uvicorn app.main:app --reload
 # → http://127.0.0.1:8000/docs
 
-# لندینگ
-cd apps/landing
-python3 -m http.server 8000
+# فرانت‌اند عمومی
+cd apps/web
+npm install
+npm run dev
+# → http://localhost:3000
 ```
 
 ## اسناد
