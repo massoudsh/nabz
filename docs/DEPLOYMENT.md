@@ -4,7 +4,20 @@
 توسعه اجرا نمی‌شود.** تست‌های سبک (pytest) در همین کانتینر و در CI اجرا می‌شوند؛
 نصب production، اجرای سرویس، و هر عملیات سنگین‌تر باید روی سرور SSH انجام شود.
 
-## ۱. یکپارچه‌سازی مداوم (CI)
+## ۱. اجرای کامل با Docker Compose
+
+برای اجرای frontend، API و PostgreSQL به‌صورت یکپارچه:
+
+```bash
+docker compose up --build -d
+docker compose logs -f
+docker compose down
+```
+
+فرانت‌اند روی پورت `3000` و API روی پورت `8000` در دسترس هستند. مقدار `NBA_API_KEYS`
+را در محیط اجرا تنظیم کنید تا endpointهای محافظت‌شده احراز هویت شوند. بیلد imageها را
+روی سرور یا CI اجرا کنید، نه داخل کانتینر توسعه.
+
 
 `.github/workflows/ci.yml` روی هر push/PR به `master`، وابستگی‌های `services/nba-engine`
 را نصب و `pytest` را اجرا می‌کند (روی runner گیت‌هاب، نه کانتینر توسعه — پس محدودیت

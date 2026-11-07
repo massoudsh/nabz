@@ -1,0 +1,38 @@
+services:
+  database:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: nabz
+      POSTGRES_USER: nabz
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nabz-local-password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nabz -d nabz"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  nba-engine:
+    build:
+      context: ./services/nba-engine
+    environment:
+      DATABASE_URL: postgresql+psycopg2://nabz:${POSTGRES_PASSWORD:-nabz-local-password}@database:5432/nabz
+      NBA_API_KEYS: ${NBA_API_KEYS:-}
+    ports:
+      - "8000:8000"
+    depends_on:
+      database:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ./apps/web
+    ports:
+      - "3000:3000"
+    depends_on:
+      nba-engine:
+        condition: service_started
+
+volumes:
+  postgres_data:
