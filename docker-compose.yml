@@ -1,6 +1,6 @@
 services:
   database:
-    image: postgres:16-alpine
+    image: ${POSTGRES_IMAGE:-postgres:16-alpine}
     environment:
       POSTGRES_DB: nabz
       POSTGRES_USER: nabz
@@ -16,6 +16,8 @@ services:
   nba-engine:
     build:
       context: ./services/nba-engine
+      args:
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.12-slim}
     environment:
       DATABASE_URL: postgresql+psycopg2://nabz:${POSTGRES_PASSWORD:-nabz-local-password}@database:5432/nabz
       NBA_API_KEYS: ${NBA_API_KEYS:-}
@@ -28,6 +30,10 @@ services:
   web:
     build:
       context: ./apps/web
+      args:
+        NODE_IMAGE: ${NODE_IMAGE:-node:22-alpine}
+    environment:
+      NODE_ENV: production
     ports:
       - "3000:3000"
     depends_on:

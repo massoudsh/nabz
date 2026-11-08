@@ -56,6 +56,66 @@ export NBA_API_KEYS="dev-key-1"
 docker compose up --build
 ```
 
+### استفاده از registry mirror یا image محلی
+
+اگر شبکه‌ی Docker به Docker Hub دسترسی ندارد، imageهای پایه را با متغیرهای محیطی جایگزین کنید:
+
+```bash
+export POSTGRES_IMAGE="registry.example.com/postgres:16-alpine"
+export PYTHON_IMAGE="registry.example.com/python:3.12-slim"
+export NODE_IMAGE="registry.example.com/node:22-alpine"
+docker compose up -d --build
+```
+
+اگر imageها از قبل روی سیستم موجودند، از pull دوباره جلوگیری کنید:
+
+```bash
+docker compose up -d --build --pull never
+```
+
+### خطای `Get "https://registry-1.docker.io/v2/": EOF`
+
+این خطا مربوط به دسترسی daemon داکر به registry است، نه به کد پروژه. `curl https://registry-1.docker.io/v2/` که پاسخ `401` می‌دهد طبیعی است (endpoint بدون توکن همیشه 401 برمی‌گرداند) و فقط نشان می‌دهد شبکهٔ shell سالم است.
+
+1. تکرار pull — خطای `EOF` معمولاً موقتی است:
+
+   ```bash
+   docker pull postgres:16-alpine
+   ```
+
+2. تنظیم پروکسی برای daemon (اگر پروکسی دارید) در `~/.docker/config.json`:
+
+   ```json
+   {
+     "proxies": {
+       "default": {
+         "httpProxy": "http://PROXY_HOST:PROXY_PORT",
+         "httpsProxy": "http://PROXY_HOST:PROXY_PORT",
+         "noProxy": "localhost,127.0.0.1"
+       }
+     }
+   }
+   ```
+
+   سپس `sudo systemctl restart docker`.
+
+3. تنظیم DNS یا mirror در `/etc/docker/daemon.json`:
+
+   ```json
+   {
+     "dns": ["8.8.8.8", "1.1.1.1"],
+     "registry-mirrors": ["https://YOUR_MIRROR"]
+   }
+   ```
+
+   سپس `sudo systemctl restart docker`.
+
+4. صحت تنظیمات daemon را بررسی کنید:
+
+   ```bash
+   docker info | grep -iE 'proxy|registry|mirror'
+   ```
+
 ## اجرای محلی بدون Docker
 
 ```bash
