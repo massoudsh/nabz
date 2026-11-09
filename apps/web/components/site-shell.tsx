@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 const navigation = [
+  { href: "/dashboard", label: "میز کار" },
   { href: "/product", label: "محصول" },
   { href: "/how-it-works", label: "چطور کار می‌کند" },
   { href: "/demo", label: "دموی موتور" },
