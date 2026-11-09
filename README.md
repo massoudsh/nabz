@@ -73,7 +73,18 @@ docker compose up -d --build
 docker compose up -d --build --pull never
 ```
 
-### خطای `Get "https://registry-1.docker.io/v2/": EOF`
+اگر Docker به PyPI دسترسی مستقیم ندارد یا mirror داخلی دارید، index و timeout نصب Python را تنظیم کنید:
+
+```bash
+export PIP_INDEX_URL="https://YOUR_PYPI_MIRROR/simple"
+export PIP_TIMEOUT=120
+export PIP_RETRIES=10
+docker compose build --no-cache nba-engine
+docker compose up -d
+```
+
+اگر PyPI از سیستم میزبان باز است اما داخل build timeout می‌شود، proxy مربوط به Docker daemon را تنظیم کنید؛ shell proxy به‌صورت خودکار به daemon منتقل نمی‌شود.
+
 
 این خطا مربوط به دسترسی daemon داکر به registry است، نه به کد پروژه. `curl https://registry-1.docker.io/v2/` که پاسخ `401` می‌دهد طبیعی است (endpoint بدون توکن همیشه 401 برمی‌گرداند) و فقط نشان می‌دهد شبکهٔ shell سالم است.
 
