@@ -12,6 +12,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+    restart: unless-stopped
 
   nba-engine:
     build:
@@ -29,6 +30,7 @@ services:
     depends_on:
       database:
         condition: service_healthy
+    restart: unless-stopped
 
   web:
     build:
@@ -41,7 +43,8 @@ services:
       - "3000:3000"
     depends_on:
       nba-engine:
-        condition: service_started
+        condition: service_healthy
+    restart: unless-stopped
 
 volumes:
   postgres_data:

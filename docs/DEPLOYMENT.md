@@ -18,12 +18,31 @@ docker compose down
 را در محیط اجرا تنظیم کنید تا endpointهای محافظت‌شده احراز هویت شوند. بیلد imageها را
 روی سرور یا CI اجرا کنید، نه داخل کانتینر توسعه.
 
+هر سه سرویس `restart: unless-stopped` دارند و سرویس `web` فقط پس از عبور healthcheck
+موتور (`GET /health`) بالا می‌آید؛ پس خطای راه‌اندازی به‌جای صفحهٔ سفید، در
+`docker compose ps` دیده می‌شود. هر image نیز `HEALTHCHECK` مخصوص خود را دارد
+(`/health` برای API و `/` برای فرانت‌اند) و هر دو با کاربر غیر root اجرا می‌شوند.
+
+پیکربندی با فایل محیطی:
+
+```bash
+cp .env.example .env
+docker compose up --build -d
+```
+
+پس از تغییر کد فرانت‌اند:
+
+```bash
+docker compose up -d --build --force-recreate --no-deps web
+```
+
+## ۲. یکپارچه‌سازی مداوم (CI)
 
 `.github/workflows/ci.yml` روی هر push/PR به `master`، وابستگی‌های `services/nba-engine`
-را نصب و `pytest` را اجرا می‌کند (روی runner گیت‌هاب، نه کانتینر توسعه — پس محدودیت
-بیلد سنگین اینجا اثر ندارد؛ کار سبک است: نصب pip + اجرای تست).
+را نصب و `pytest` را اجرا می‌کند و جداگانه فرانت‌اند را type-check و build می‌کند
+(روی runner گیت‌هاب، نه کانتینر توسعه).
 
-## ۲. استقرار nba-engine (روی سرور SSH)
+## ۳. استقرار nba-engine (روی سرور SSH)
 
 ### پیش‌نیاز
 - Python 3.12
@@ -73,10 +92,9 @@ WantedBy=multi-user.target
 (با TLS). `X-API-Key` باید توسط مصرف‌کننده‌های API ارسال شود؛ `/admin` هم با همان
 کلید از طریق پارامتر `?api_key=` در مرورگر قابل دسترسی است.
 
-## ۳. استقرار فرانت‌اند عمومی (`apps/web`)
+## ۴. استقرار فرانت‌اند عمومی (`apps/web`)
 
 فرانت‌اند Next.js مسیر اصلی معرفی محصول و دمو است. بیلد production را روی سرور SSH اجرا کنید:
-
 ```bash
 cd /path/on/server/nabz/apps/web
 npm ci
@@ -86,7 +104,7 @@ npm run start
 
 برای reverse proxy، سرویس Next.js را پشت nginx/caddy و با TLS منتشر کنید.
 
-## ۴. چک‌لیست پیش از استقرار عمومی
+## ۵. چک‌لیست پیش از استقرار عمومی
 
 - [ ] `NBA_API_KEYS` تنظیم شده (خالی نگذارید — issue #7).
 - [ ] `DATABASE_URL` به Postgres واقعی اشاره می‌کند، نه SQLite توسعه.

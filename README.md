@@ -23,16 +23,22 @@ apps/
 پیش‌نیاز: Docker و Docker Compose نصب‌شده روی سیستم.
 
 ```bash
-# از ریشهٔ پروژه
+# از ریشهٔ پروژه (اختیاری: cp .env.example .env برای تنظیم رمز و کلید API)
 docker compose up --build
 ```
 
-سرویس‌ها:
+سرویس‌ها پس از آماده‌شدن سلامت API بالا می‌آیند:
 
 - فرانت‌اند: http://localhost:3000
 - API و مستندات: http://localhost:8000/docs
 - سلامت API: http://localhost:8000/health
 - پنل مدیریتی: http://localhost:8000/admin
+
+بررسی سلامت همهٔ سرویس‌ها:
+
+```bash
+docker compose ps
+```
 
 اجرای پس‌زمینه، مشاهده لاگ و توقف:
 
@@ -54,6 +60,12 @@ docker compose down -v
 export POSTGRES_PASSWORD="یک-رمز-قوی"
 export NBA_API_KEYS="dev-key-1"
 docker compose up --build
+```
+
+پس از اعمال تغییر در کد فرانت‌اند، image آن را دوباره بسازید و کانتینر را جایگزین کنید:
+
+```bash
+docker compose up -d --build --force-recreate --no-deps web
 ```
 
 ### استفاده از registry mirror یا image محلی
