@@ -7,7 +7,13 @@ __pycache__/
 .pytest_cache/
 *.db
 node_modules/
+.next/
+.env
+.env.local
 .DS_Store
 *.log
 .noqte/
 .whisper-cache/
+
+# TypeScript incremental build output
+tsconfig.tsbuildinfo
